@@ -1,0 +1,2 @@
+#!/bin/sh
+dpkg -s ruby > /dev/null || (echo "machine has no ruby; installing..."; apt-get install --no-install-recommends -y ruby)
