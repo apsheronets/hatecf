@@ -254,7 +254,7 @@ module Remote
     if dpkg_installed?(names)
       ok "installed: #{names.join(', ')}"
     else
-      destructive "apt-get install #{names.is_a?(Array) ? names.join(' ') : names}" do
+      destructive "apt-get install #{names.join(' ')}" do
         unless apt_updated
           cmd = ["apt-get", "update", "-q"]
           spawn(cmd, expect_status: 0)
