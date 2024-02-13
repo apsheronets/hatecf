@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
 require "hatecf"
-target host: "123.123.123.123"
-domain = "example.com"
-email = "user@example.com"
+
+target host: "123.123.123.123" # edit
+domain = "example.com"         # these
+email = "user@example.com"     # variables
 
 nginx_http = <<~CONFIG
   server {
@@ -52,7 +53,7 @@ block do
   end.fix do
     # nginx won't start without certificate files missing
     rm("/etc/nginx/sites-enabled/#{domain}.https").afterwards do
-      service_reload :nginx
+      command "systemctl nginx reload"
     end
     command "certbot certonly -n --webroot --webroot-path=/var/www/html -m #{email} --agree-tos -d #{domain}"
   end
@@ -60,7 +61,7 @@ block do
   ln_s "/etc/nginx/sites-available/#{domain}.https",
        "/etc/nginx/sites-enabled/#{domain}.https"
 end.afterwards do
-  service_reload "nginx"
+  command "systemctl nginx reload"
 end
 
 edit_config "/etc/letsencrypt/cli.ini" do |c|
