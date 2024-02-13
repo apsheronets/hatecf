@@ -26,12 +26,14 @@ def local_file(path)
   return LocalFile.new(path)
 end
 
+# FIXME: unused
 class LocalEntity
   def initialize(payload)
     @payload = payload
   end
 end
 
+# FIXME: unused
 def local(x)
   LocalEntity.new(x)
 end

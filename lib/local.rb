@@ -117,6 +117,7 @@ module Local
       pid, status = Process.wait2(Process.spawn(cmd))
       debug "exit status: #{status.exitstatus}"
     end
+    # FIXME: this always returns the status of "; rm" above, doesn't it?
     exit status.exitstatus
   end
 
