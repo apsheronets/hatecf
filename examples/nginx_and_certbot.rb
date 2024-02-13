@@ -53,7 +53,7 @@ block do
   end.fix do
     # nginx won't start without certificate files missing
     rm("/etc/nginx/sites-enabled/#{domain}.https").afterwards do
-      command "systemctl nginx reload"
+      command "systemctl reload nginx"
     end
     command "certbot certonly -n --webroot --webroot-path=/var/www/html -m #{email} --agree-tos -d #{domain}"
   end
@@ -61,7 +61,7 @@ block do
   ln_s "/etc/nginx/sites-available/#{domain}.https",
        "/etc/nginx/sites-enabled/#{domain}.https"
 end.afterwards do
-  command "systemctl nginx reload"
+  command "systemctl reload nginx"
 end
 
 edit_config "/etc/letsencrypt/cli.ini" do |c|
