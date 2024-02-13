@@ -107,7 +107,12 @@ module Local
         FileUtils.mkdir local_files_dir
         copy_local_files_to(local_files_dir)
       end
-      cmd = "tar -czP #{tmp_dir} | ssh #{@target[:user] || DEFAULT_TARGET[:user]}@#{@target[:host]} \"tar -xzP -C / && (cd #{tmp_dir} && ./bootstrap_ruby && RUBYLIB=. ./script.rb #{@dry_run ? "--dry " : " "}--local-home #{ENV["HOME"]} --local-script-dir #{script_dir}); rm -r #{tmp_dir}\""
+      script_opts = []
+      script_opts << "--dry" if @dry_run
+      script_opts << "-v" if @verbose
+      script_opts << "--local-home #{ENV["HOME"]}"
+      script_opts << "--local-script-dir #{script_dir}"
+      cmd = "tar -czP #{tmp_dir} | ssh #{@target[:user] || DEFAULT_TARGET[:user]}@#{@target[:host]} \"tar -xzP -C / && (cd #{tmp_dir} && ./bootstrap_ruby && RUBYLIB=. ./script.rb #{script_opts.join(" ")}); rm -r #{tmp_dir}\""
       debug "executing: #{cmd}"
       pid, status = Process.wait2(Process.spawn(cmd))
       debug "exit status: #{status.exitstatus}"
@@ -120,9 +125,13 @@ module Local
     opts.on "--dry", "don't change anything, just test everything" do |x|
       @dry_run = true
     end
+    opts.on "-v", "verbose mode: print debug messages" do |x|
+      @verbose = true
+    end
   end.parse!
 
   def debug(s)
+    info s if @verbose
   end
 
   def info(s)

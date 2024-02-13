@@ -462,6 +462,7 @@ module Remote
   end
 
   def debug(s)
+    info s if @verbose
   end
 
   def info(s)
@@ -493,6 +494,9 @@ module Remote
     end
     opts.on "--dry" do |x|
       @dry_run = true
+    end
+    opts.on "-v" do |x|
+      @verbose = true
     end
   end.parse!
 end
