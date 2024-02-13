@@ -98,13 +98,19 @@ end
 perform!
 ```
 
-The minimal script
-------------------
+More examples
+-------------
+
+ * [one-click https with nginx and certbot](examples/nginx_and_certbot.rb)
+
+A minimal script
+----------------
 
 ```ruby
 #!/usr/bin/env ruby
 require "hatecf"
 target host: "123.123.123.123"
+# your tasks go here...
 perform!
 ```
 

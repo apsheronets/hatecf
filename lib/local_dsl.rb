@@ -123,6 +123,11 @@ def mkdir_p(x)
   TaskResult.new
 end
 
+def rm(x)
+  Local.type_check nil, x, String
+  TaskResult.new
+end
+
 def cp(src, dst, mode: nil)
   Local.type_check(1, src, String, LocalFile)
   Local.type_check(1, dst, String)
@@ -146,6 +151,28 @@ def ln_s(src, dst)
   Local.type_check(1, src, String)
   Local.type_check(2, dst, String)
   TaskResult.new
+end
+
+class CheckResult
+  def initialize(result)
+    @result = result
+  end
+  def fix
+    yield
+  end
+  def check(message = nil)
+    Local.type_check nil, message, String if message
+    # NOT yielding here. Check blocks contain code
+    # that works only on remote target.
+    CheckResult.new(false)
+  end
+end
+
+def check(message = nil)
+  Local.type_check nil, message, String if message
+  # NOT yielding here. Check blocks contain code
+  # that works only on remote target.
+  CheckResult.new(false)
 end
 
 def block

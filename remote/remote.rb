@@ -330,6 +330,17 @@ module Remote
     end
   end
 
+  def rm(x)
+    x = File.expand_path x
+    if File.exists? x
+      destructive "rm #{x}" do
+        FileUtils.rm x
+      end
+    else
+      ok "#{x} already removed"
+    end
+  end
+
   # TODO: the dst is a dir case
   def cp(src, dst, mode)
     src = src.remote_path if src.is_a? LocalFile

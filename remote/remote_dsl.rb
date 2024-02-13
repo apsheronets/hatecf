@@ -78,6 +78,12 @@ def mkdir_p(x)
   end
 end
 
+def rm(x)
+  Remote.task do
+    Remote.rm(x)
+  end
+end
+
 def cp(src, dst, mode: nil)
   Remote.task do
     Remote.cp(src, dst, mode)
@@ -94,6 +100,31 @@ def ln_s(src, dst)
   Remote.task do
     Remote.ln_s(src, dst)
   end
+end
+
+class CheckResult
+  def initialize(result)
+    @result = result
+  end
+  def fix
+    yield unless @result
+  end
+  def check(message = nil)
+    if @result
+      # skip
+      CheckResult.new @result
+    else
+      result = yield
+      Remote.ok message if result && message
+      CheckResult.new result
+    end
+  end
+end
+
+def check(message = nil)
+  result = yield
+  Remote.ok message if result && message
+  CheckResult.new result
 end
 
 def block
