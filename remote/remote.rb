@@ -174,6 +174,7 @@ module Remote
     end
   end
 
+  require 'fileutils'
   def authorize_ssh_key(user, key)
     case key
     when LocalFile
@@ -183,7 +184,6 @@ module Remote
     else
       raise "type #{key.class} is not supported for a SSH public key"
     end
-    require 'fileutils'
     home_dir = get_user_home_dir(user)
     ssh_dir = File.join(home_dir, ".ssh")
     authorized_keys_path = File.join(ssh_dir, "authorized_keys")
@@ -368,11 +368,11 @@ module Remote
   def ln_s(src, dst)
     src = File.expand_path src
     dst = File.expand_path dst
-    if File.lstat(dst).symlink? && File.readlink(dst) == src
+    if File.exist?(dst) &&File.lstat(dst).symlink? && File.readlink(dst) == src
       ok "#{dst} leads to #{src}"
     else
       destructive "ln -s #{src} #{dst}" do
-        FileUtils.ln_s src dst
+        FileUtils.ln_s src, dst
       end
     end
   end
