@@ -296,12 +296,12 @@ module Remote
 
   def create_config(path, text)
     path = File.expand_path path
-    unless File.exist?(path) && File.read(path).rstrip == text
+    unless File.exist?(path) && File.read(path).rstrip == text.rstrip
       destructive "writing config #{path}" do
         File.open(path, File::CREAT | File::TRUNC | File::WRONLY) do |f|
           f.flock(File::LOCK_EX)
           f.write(text)
-          f.write("\n")
+          f.write("\n") unless text[-1] == "\n"
         end
       end
     else
