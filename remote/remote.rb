@@ -157,7 +157,7 @@ module Remote
   end
 
   def get_uid_and_gid_of_user(name)
-    r = Etc.getpwnam(name).dir
+    r = Etc.getpwnam(name)
     [r.uid, r.gid]
   end
 
