@@ -146,7 +146,7 @@ Philosophy
 Developing
 ----------
 
- * Since we don't rely on a Gemfile, I found the `LOAD_PATH=` environment variable quite useful.
+ * Since we don't rely on a Gemfile, I found the `RUBYLIB=` environment variable quite useful.
 
 TODO
 ----
