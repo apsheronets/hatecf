@@ -376,10 +376,12 @@ module Remote
     end
   end
 
+  # TODO: handle "dst is a dir" case
+  # TODO: relative path case
   def ln_s(src, dst)
     src = File.expand_path src
     dst = File.expand_path dst
-    if File.exist?(dst) &&File.lstat(dst).symlink? && File.readlink(dst) == src
+    if File.exist?(dst) && File.lstat(dst).symlink? && File.readlink(dst) == src
       ok "#{dst} leads to #{src}"
     else
       destructive "ln -s #{src} #{dst}" do
@@ -387,8 +389,6 @@ module Remote
       end
     end
   end
-
-  #attr_accessor :impressionating_user
 
   def spawn(cmd, expect_status: nil)
     expect_status = [expect_status] unless expect_status.nil? || expect_status.respond_to?(:include?)

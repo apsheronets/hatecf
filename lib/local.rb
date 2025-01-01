@@ -92,8 +92,8 @@ module Local
   require 'tmpdir'
   def perform!
     die "no target host specified!" if (@target[:host] || "").empty?
-    script_path = File.expand_path(ENV["_"])
-    script_dir = File.dirname(File.expand_path(ENV["_"]))
+    script_path = File.expand_path ENV["_"]
+    script_dir = File.dirname script_path
     status = nil
     Dir.mktmpdir "hatecf" do |tmp_dir|
       debug "using temporary dir #{tmp_dir}"
