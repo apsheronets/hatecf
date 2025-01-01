@@ -341,7 +341,7 @@ module Remote
     end
   end
 
-  # TODO: the dst is a dir case
+  # TODO: handle "dst is a dir" case
   def cp(src, dst, mode)
     src = src.remote_path if src.is_a? LocalFile
     dst = File.expand_path dst

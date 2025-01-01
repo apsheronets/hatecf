@@ -143,6 +143,11 @@ Philosophy
  * Better just mimic Bash.
  * Better save as much of ability to write scripts in pure Ruby as possible.
 
+Developing
+----------
+
+ * Since we don't rely on a Gemfile, I found the `LOAD_PATH=` environment variable quite useful.
+
 TODO
 ----
 

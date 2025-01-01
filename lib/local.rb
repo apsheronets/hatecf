@@ -66,6 +66,8 @@ module Local
   @local_files = []
 
   require 'pathname'
+  # TODO: we are not able to copy directories with this,
+  #       but we should be
   def copy_local_files_to(dir)
     @local_files.each do |local_file|
       # dublicating the whole directory stucture
