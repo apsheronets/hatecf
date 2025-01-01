@@ -215,7 +215,11 @@ class RemoteFile
   end
 end
 
-def perform!
+def perform! # legacy, not needed since 0.2
+  Local.perform!
+end
+
+Kernel.at_exit do
   Local.perform!
 end
 

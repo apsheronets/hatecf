@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "hatecf"
-  s.version     = "0.1.1"
+  s.version     = "0.2.0"
   s.summary     = "Configuration management powered by hate"
   s.description = "Configuration management engine like Ansible but without YAML and 30 times faster"
   s.authors     = ["Alexander Markov"]

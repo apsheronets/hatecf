@@ -94,8 +94,6 @@ as user do
   # you could use local paths relative to your script
   cp local_file("myapp/database.yml"), "~/myapp/config/database.yml"
 end
-
-perform!
 ```
 
 More examples
@@ -111,7 +109,6 @@ A minimal script
 require "hatecf"
 target host: "123.123.123.123"
 # your tasks go here...
-perform!
 ```
 
 Install

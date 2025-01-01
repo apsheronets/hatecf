@@ -89,8 +89,11 @@ module Local
     end
   end
 
+  @performed = false
   require 'tmpdir'
   def perform!
+    return if @performed # just for compatibility with < 0.2
+                         # when manual invoke of peform! was needed
     die "no target host specified!" if (@target[:host] || "").empty?
     script_path = File.expand_path ENV["_"]
     script_dir = File.dirname script_path
@@ -119,6 +122,7 @@ module Local
       pid, status = Process.wait2(Process.spawn(cmd))
       debug "exit status: #{status.exitstatus}"
     end
+    @performed = true
     # FIXME: this always returns the status of "; rm" above, doesn't it?
     exit status.exitstatus
   end

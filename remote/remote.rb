@@ -510,4 +510,11 @@ module Remote
       @verbose = true
     end
   end.parse!
+
+  @performed = false
+  def perform!
+    return if @performed
+    info "ok: #{ok_counter}, changed: #{changed_counter}"
+    @performed = true
+  end
 end

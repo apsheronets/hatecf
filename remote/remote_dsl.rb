@@ -181,8 +181,12 @@ def remote_file(path)
   Remote::RemoteFile.new(path)
 end
 
-def perform!
-  Remote.info "ok: #{Remote.ok_counter}, changed: #{Remote.changed_counter}"
+def perform! # legacy, not needed since 0.2
+  Remote.perform!
+end
+
+Kernel.at_exit do
+  Remote.perform!
 end
 
 # Monkey-patching
