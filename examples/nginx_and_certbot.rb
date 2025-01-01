@@ -67,5 +67,3 @@ end
 edit_config "/etc/letsencrypt/cli.ini" do |c|
   c.add_line "deploy-hook = systemctl reload nginx"
 end
-
-perform!
