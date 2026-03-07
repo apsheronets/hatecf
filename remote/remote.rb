@@ -1,9 +1,9 @@
 module Remote
   extend self
 
-  # $HOME variable should be imported from local machine
-  # in order to access ~/ paths
-  # and directory of scrip should be imported
+  # $HOME variable should be imported from the local machine
+  # in order to access tilda ~/ paths
+  # and directory of the script should be imported
   # in order to access relative ./ paths
   attr_accessor :local_home, :local_script_dir
 
@@ -177,6 +177,7 @@ module Remote
   end
 
   require 'fileutils'
+  # FIXME: even when run "afterwards" it crashes if user doesn't exist.
   def authorize_ssh_key(user, key)
     case key
     when LocalFile
