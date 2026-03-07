@@ -129,6 +129,7 @@ module Remote
   end
 
   def service_reload(name)
+    name = name.to_s
     destructive "reloading service #{name}" do
       cmd = ["systemctl", "reload", name]
       spawn(cmd, expect_status: 0)
@@ -136,6 +137,7 @@ module Remote
   end
 
   def service_restart(name)
+    name = name.to_s
     destructive "restarting service #{name}" do
       cmd = ["systemctl", "restart", name]
       spawn(cmd, expect_status: 0)
