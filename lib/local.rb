@@ -100,6 +100,9 @@ module Local
     status = nil
     Dir.mktmpdir "hatecf" do |tmp_dir|
       debug "using temporary dir #{tmp_dir}"
+      File.chmod(00755, tmp_dir) # TODO: this is a tiny security issue.
+                                 #       We should set these permissions
+                                 #       only when we have "as" blocks.
       FileUtils.cp(script_path, File.join(tmp_dir, "script.rb"))
       File.chmod(00777, File.join(tmp_dir, "script.rb"))
       FileUtils.cp(File.join(__dir__, "../remote/hatecf.rb"    ), tmp_dir)
