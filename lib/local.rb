@@ -131,14 +131,19 @@ module Local
   end
 
   require 'optparse'
-  OptionParser.new do |opts|
-    opts.on "--dry", "don't change anything, just test everything" do |x|
-      @dry_run = true
-    end
-    opts.on "-v", "verbose mode: print debug messages" do |x|
-      @verbose = true
-    end
-  end.parse!
+  begin
+    OptionParser.new do |opts|
+      opts.on "--dry", "don't change anything, just test everything" do |x|
+        @dry_run = true
+      end
+      opts.on "-v", "verbose mode: print debug messages" do |x|
+        @verbose = true
+      end
+    end.parse!
+  rescue OptionParser::InvalidOption => e
+    $stderr.puts e
+    exit 1
+  end
 
   def debug(s)
     info s if @verbose
