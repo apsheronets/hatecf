@@ -4,10 +4,14 @@ def target(host:, user: nil, port: nil)
   Local.type_check(:host, host, String)
   Local.type_check(:user, user, String) if user
   Local.type_check(:port, port, Integer) if port
-  #Local.target = Local::DEFAULT_TARGET.dup
-  Local.target[:host] = host
-  Local.target[:user] = user if user
-  Local.target[:port] = port if port
+  if Local.target.empty?
+    Local.target[:host] = host
+    Local.target[:user] = user if user
+    Local.target[:port] = port if port
+  else
+    Local.die "multiple targets not supported (yet, idk)"
+    exit 1
+  end
 end
 
 class LocalFile
