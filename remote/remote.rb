@@ -165,6 +165,8 @@ module Remote
 
   def create_user(name, create_home, shell)
     if user_exists?(name)
+      # TODO: should we check if existing user
+      #       has the specified shell?
       ok "#{name} user exists"
     else
       destructive "creating user #{name}" do
