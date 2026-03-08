@@ -18,9 +18,12 @@ module Local
     end
   end
 
+  attr_accessor :really_die
+  @really_die = false
   def die(message)
     $stderr.puts "Script error: #{message}"
     print_location
+    @really_die = true
     exit 1
   end
 

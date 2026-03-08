@@ -220,7 +220,7 @@ def perform! # legacy, not needed since 0.2
 end
 
 Kernel.at_exit do
-  Local.perform!
+  Local.perform! unless Local.really_die
 end
 
 # Monkey-patching
