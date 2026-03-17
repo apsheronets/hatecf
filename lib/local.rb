@@ -73,7 +73,7 @@ module Local
   #       but we should be
   def copy_local_files_to(dir)
     @local_files.each do |local_file|
-      # dublicating the whole directory stucture
+      # duplicating the whole directory structure
       acc = []
       Pathname.new(local_file).each_filename do |chunk|
         source_path = File.join(*(['/'] + acc << chunk))
