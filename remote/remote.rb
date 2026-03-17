@@ -287,7 +287,7 @@ module Remote
       installed.each do |name|
         destructive "apt-get remove #{name}" do
           cmd = ["apt-get", "remove", "-y"]
-          cmd += name
+          cmd << name
           spawn cmd, expect_status: 0
         end
       end
