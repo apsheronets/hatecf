@@ -337,7 +337,7 @@ module Remote
 
   def rm(x)
     x = File.expand_path x
-    if File.exists? x
+    if File.exist? x
       destructive "rm #{x}" do
         FileUtils.rm x
       end

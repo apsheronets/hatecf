@@ -49,7 +49,7 @@ block do
        "/etc/nginx/sites-enabled/#{domain}.http"
 
   check "certificate for #{domain} already exists" do
-    File.exists? "/etc/letsencrypt/live/#{domain}/fullchain.pem"
+    File.exist? "/etc/letsencrypt/live/#{domain}/fullchain.pem"
   end.fix do
     # nginx won't start with certificate files missing
     rm("/etc/nginx/sites-enabled/#{domain}.https").afterwards do
