@@ -225,7 +225,6 @@ module Remote
     end
   end
 
-  attr_accessor :apt_updated
   def dpkg_installed?(names)
     #            | virtual | virtual | removed
     #            | package | package | but
@@ -253,6 +252,7 @@ module Remote
     end
   end
 
+  @apt_updated = false
   def apt_install(names)
     names = names.to_s if names.is_a? Symbol
     names = names.split(/\s+/).map(&:strip).select{|x|not x.empty?} if names.is_a? String
@@ -260,10 +260,10 @@ module Remote
       ok "installed: #{names.join(', ')}"
     else
       destructive "apt-get install #{names.join(' ')}" do
-        unless apt_updated
+        unless @apt_updated
           cmd = ["apt-get", "update", "-q"]
           spawn(cmd, expect_status: 0)
-          apt_updated = true
+          @apt_updated = true
         end
 
         cmd = ["apt-get", "install", "--no-install-recommends", "-y"]
