@@ -282,10 +282,12 @@ module Remote
     if installed.empty?
       ok "removed: #{names.join(", ")}"
     else
+      # FIXME: eh, what was the logic behind this cycle when I made it?..
+      #        Why do I need to remove packages one by one?
       installed.each do |name|
         destructive "apt-get remove #{name}" do
           cmd = ["apt-get", "remove", "-y"]
-          cmd += names
+          cmd += name
           spawn cmd, expect_status: 0
         end
       end
