@@ -397,18 +397,14 @@ module Remote
     end
   end
 
+  require 'open3'
   def spawn(cmd, expect_status: nil)
     expect_status = [expect_status] unless expect_status.nil? || expect_status.respond_to?(:include?)
-    stdout_r, stdout_w = IO.pipe
     debug "executing #{cmd.inspect}"
-    pid, status = Process.wait2(Process.spawn(*cmd, in: File::NULL, out: stdout_w, err: stdout_w))
+    text, status = Open3.capture2e(*cmd, stdin_data: "")
     if expect_status && (not expect_status.include?(status.exitstatus))
-      stdout_w.close
-      text = stdout_r.read
       raise CommandError.new("A process #{cmd.inspect} returned unexpected exit status #{status.exitstatus}", text)
     end
-    stdout_w.close
-    stdout_r.close
     return status.exitstatus
   end
 
