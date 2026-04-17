@@ -1,3 +1,4 @@
+require 'open3'
 module Remote
   extend self
 
@@ -225,23 +226,34 @@ module Remote
     end
   end
 
-  def dpkg_installed?(names)
-    #            | virtual | virtual | removed
-    #            | package | package | but
-    #            | present | absent  | dependency
-    #     method |         |         | left
-    # ----------------------------------------
-    #    dpkg -s | exit 1  | exit 1  | exit 1
-    # ----------------------------------------
-    # dpkg-qeury | exit 0  | exit 1  | exit 0
-    #         -W |         |         |
-    case names
-    when Array
-      cmd = ["dpkg-query", "-W"] + names
-    when String
-      cmd = ["dpkg-query", "-W", names]
+  def get_installed_pkgs_list
+    cmd = ["dpkg-query", "-W", "-f=${db:Status-Status}; ${Package}; ${Provides}\n"]
+    text, status = Open3.capture2e(*cmd, stdin_data: "")
+    raise CommandError.new("command #{cmd.inspect} returned unexpected exit status #{status.exitstatus}", text) if status.exitstatus != 0
+    installed = []
+    text.split("\n").each do |line|
+      status, package, provides = line.split("; ")
+      next if status != "installed"
+      installed << package
+      next if provides.nil? || provides.empty?
+      provides.split(", ").each do |x|
+        installed << x.split(" ").first
+      end
     end
-    spawn(cmd, expect_status: [0,1]) == 0
+    return installed
+  end
+
+  def dpkg_installed?(arg)
+    case arg
+    when Array
+      names = arg
+    when String
+      names = [arg]
+    else
+      raise "unexpected type of #{arg.inspect}"
+    end
+    installed = get_installed_pkgs_list
+    not names.any?{|x| not installed.include?(x)}
   end
 
   def apt_update
@@ -397,13 +409,12 @@ module Remote
     end
   end
 
-  require 'open3'
   def spawn(cmd, expect_status: nil)
     expect_status = [expect_status] unless expect_status.nil? || expect_status.respond_to?(:include?)
     debug "executing #{cmd.inspect}"
     text, status = Open3.capture2e(*cmd, stdin_data: "")
     if expect_status && (not expect_status.include?(status.exitstatus))
-      raise CommandError.new("A process #{cmd.inspect} returned unexpected exit status #{status.exitstatus}", text)
+      raise CommandError.new("command #{cmd.inspect} returned unexpected exit status #{status.exitstatus}", text)
     end
     return status.exitstatus
   end
